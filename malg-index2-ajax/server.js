@@ -41,7 +41,7 @@ app.get('/commandB', function(req, res) {
 });
 
 app.get('/commandSTOP', function(req, res) {
-	commandB();
+	commandSTOP();
 	res.send('Successfully sent command STOP!');
 });
 
@@ -62,7 +62,11 @@ app.listen(PORT, function() {
 	console.log('Server listening on ' + PORT);
 });
 
-// *****************************************
+
+
+
+
+
 // *****************************************
 // *****************************************
 //  Communicate with the MALG board

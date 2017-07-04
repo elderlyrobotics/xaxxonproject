@@ -99,11 +99,14 @@ void setup() {
   
 
   //N.O = GND, I.O = A2 and A3
-  /*
+  /*Limit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loop
+    Limit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loop
+ 
   Limit switch while loop
   Comment out this while loop if limit switches are not plugged in or else you can't test the servo motors.
   The switches are using normally open (NO) and are plugged into A2 and A3 in the MALG board
   */
+  /*
   while(resetCheckA == 0 || resetCheckB == 0) {
     if(debounce(switchA)==LOW) {
       motorAstop();
@@ -116,7 +119,7 @@ void setup() {
       encBTicks = 0;
     }
   }
-  
+  */
   Serial.begin(115200);
   Serial.println("<reset>"); 
 }

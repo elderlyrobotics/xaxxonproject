@@ -211,6 +211,10 @@ void motorBstop() {
   lastBposition = encBTicks;
 }
 
+/*
+COMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDS
+COMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDS
+*/
 int getCmd() {
   char cmd;
   int inputPosition;
@@ -227,6 +231,7 @@ int getCmd() {
 
   switch (cmd) {
     case 'A':
+    case 'a':
         if(inputPosition >= 0 && inputPosition <= 360) {
             runA = true;
             runB = false;
@@ -237,7 +242,8 @@ int getCmd() {
             Serial.println("Input out of range");
         }
         break;
-  case 'B':
+    case 'B':
+    case 'b':
         if(inputPosition >= 0 && inputPosition <= 360) {
             runB = true;
             runA = false;
@@ -247,7 +253,15 @@ int getCmd() {
         else {
             Serial.println("Input out of range");
         }
-        break;          
+        break;     
+    case 'S':
+    case 's':
+        Serial.println("YOU WANT TO STOP");
+        break;  
+    case 'X':
+    case 'x':
+        Serial.println("THIS SHOULD BE MALG ID");
+        break; 
   default:
         Serial.println("???");
   }

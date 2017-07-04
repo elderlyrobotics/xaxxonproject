@@ -1,9 +1,6 @@
 #define gainLimit 20
 
 /*
-In the setup there is the Limit Switch while loop will run before the <reset>
-If you don't have the limit switches plugged in, uncomment the while loop in the setup.
-
 ASCII Serial Commands
   'A' and then 0-360 no space
   'B' and then 0-360 no space
@@ -21,8 +18,7 @@ const int in4 = 8;
 // Switch
 const int switchA = A2;
 const int switchB = A3;
-int resetCheckA = 0;
-int resetCheckB = 0;
+int resetCheck = 0;
 
 // Encoder
 const int encA = A0;
@@ -59,12 +55,6 @@ double sumBerror = 0;
 double pTermB = 0, iTermB = 0, dTermB = 0;
 double driveB = 0;
 
-/*
-SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
-SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
-SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
-*/
-
 void setup() {
   pinMode(pwmA, OUTPUT);
   pinMode(pwmB, OUTPUT);
@@ -89,8 +79,8 @@ void setup() {
   sei(); // switch back on
 
    // Initial motor setup
-  analogWrite(pwmA, 45); //(25% = 64; 50% = 127; 75% = 191; 100% = 255)
-  analogWrite(pwmB, 45);
+  analogWrite(pwmA, 0); //(25% = 64; 50% = 127; 75% = 191; 100% = 255)
+  analogWrite(pwmB, 0);
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   digitalWrite(in3, LOW);
@@ -99,20 +89,15 @@ void setup() {
   
 
   //N.O = GND, I.O = A2 and A3
-  /*
-  Limit switch while loop
-  Comment out this while loop if limit switches are not plugged in or else you can't test the servo motors.
-  The switches are using normally open (NO) and are plugged into A2 and A3 in the MALG board
-  */
-  while(resetCheckA == 0 || resetCheckB == 0) {
+  while(resetCheck != 2) {
     if(debounce(switchA)==LOW) {
       motorAstop();
-      resetCheckA = 1;
+      resetCheck++;
       encATicks = 0;
     }
-    if(debounce(switchB)==LOW) {
+    else if(debounce(switchB)==LOW) {
       motorBstop();
-      resetCheckB = 1;
+      resetCheck++;
       encBTicks = 0;
     }
   }

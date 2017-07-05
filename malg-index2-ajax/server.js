@@ -86,6 +86,7 @@ var SerialPort = require('serialport');
 // e.g. today its at /dev/ttyUSB0 but tomorrow it can be /dev/ttyUSB3
 // so if there is an error the incrementUSB() function is called
 var USBnumber = 0
+
 var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
 	baudRate: 115200,
     // look for return and newline at the end of each data packet:
@@ -96,6 +97,7 @@ myPort.on('open', showPortOpen);
 myPort.on('data', sendSerialData);
 myPort.on('close', showPortClose);
 myPort.on('error', showError);
+
 
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
@@ -137,10 +139,9 @@ function showError(error) {
 }
 
 function incrementUSB() {
-	if (USBnumber < 7){
-		USBnumber++;
+	if (USBnumber < 7){		
 		console.log('Incrementing USBnumber by 1');
-
+		USBnumber++;
 		var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
 			baudRate: 115200,
 		    // look for return and newline at the end of each data packet:

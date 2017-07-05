@@ -67,18 +67,30 @@ app.listen(PORT, function() {
 
 
 
-// *****************************************
-// *****************************************
+// **********************************************************************************
+// **********************************************************************************
 //  Communicate with the MALG board
 
-	// include the library SerialPort
-var SerialPort = require('serialport'); // make a local instance of it
+// include the library SerialPort
+var SerialPort = require('serialport'); 
 
-var myPort = new SerialPort('/dev/ttyUSB2', {
+//// shows list of ports
+// SerialPort.list(function (err, ports) {
+// 	ports.forEach(function(port) {
+// 		console.log(port.comName);
+// 		console.log(port.productId);
+// 	});
+// });
+
+// sometimes the port number changes when unplugged, 
+// e.g. today its at /dev/ttyUSB0 but tomorrow it can be /dev/ttyUSB3
+// so if there is an error the incrementUSB() function is called
+var USBnumber = 0
+var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
 	baudRate: 115200,
     // look for return and newline at the end of each data packet:
     parser: SerialPort.parsers.readline('\r\n')
- });
+});
 
 myPort.on('open', showPortOpen);
 myPort.on('data', sendSerialData);
@@ -87,7 +99,7 @@ myPort.on('error', showError);
 
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
-	setTimeout(commandReady, 5000);
+	setTimeout(commandReady, 3500);
 }
 
 function commandReady(){
@@ -121,5 +133,25 @@ function showPortClose() {
  
 function showError(error) {
 	console.log('Serial port error: ' + error);
+	incrementUSB();
 }
+
+function incrementUSB() {
+	if (USBnumber < 7){
+		USBnumber++;
+		console.log('Incrementing USBnumber by 1');
+
+		var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
+			baudRate: 115200,
+		    // look for return and newline at the end of each data packet:
+		    parser: SerialPort.parsers.readline('\r\n')
+		});
+
+		myPort.on('open', showPortOpen);
+		myPort.on('data', sendSerialData);
+		myPort.on('close', showPortClose);
+		myPort.on('error', showError);
+	}
+}
+
 

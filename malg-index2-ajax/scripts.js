@@ -29,15 +29,7 @@ $(function() {
 				var tbodyEL = $('tbody');
 
 				tbodyEL.html('');
-
-				response.commands.forEach(function(command) {
-					tbodyEL.append('\
-						<tr>\
-							<td><input type="text" class="name" value="' + command.direction + '"></td>\
-						<tr>\
-					');
-				});
-			}
+			}		
 		});
 	});
 

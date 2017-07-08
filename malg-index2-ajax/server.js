@@ -86,28 +86,32 @@ var SerialPort = require('serialport');
 // e.g. today its at /dev/ttyUSB0 but tomorrow it can be /dev/ttyUSB3
 // so if there is an error the incrementUSB() function is called
 var USBnumber = 0
-
-var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
+// var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
+var myPort = new SerialPort('/dev/arduino', {
 	baudRate: 115200,
     // look for return and newline at the end of each data packet:
     parser: SerialPort.parsers.readline('\r\n')
-});
+});	
 
 myPort.on('open', showPortOpen);
 myPort.on('data', sendSerialData);
 myPort.on('close', showPortClose);
+// myPort.on('error', showError);
 myPort.on('error', showError);
 
 
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
-	setTimeout(commandReady, 3500);
+	setTimeout(commandReady, 2000);
+
 }
 
 function commandReady(){
 	console.log('Ready to receive camera commands: up, down, left, or right.');
 }
 
+// COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS 
+// COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS 
 function commandSTOP(){
 	myPort.write("s \r");
 }
@@ -120,39 +124,39 @@ function commandB(){
 	myPort.write("b 100 \r");
 }
 
-
 function commandY(){
 	myPort.write("y \r");
 }
- 
+
 function sendSerialData(data) {
 	console.log(data);
 }
- 
+
+// default functions
 function showPortClose() {
 	console.log('port closed.');
 }
  
 function showError(error) {
-	console.log('Serial port error: ' + error);
-	incrementUSB();
+	console.log('Serial ' + error);
+	// incrementUSB();
 }
 
-function incrementUSB() {
-	if (USBnumber < 7){		
-		console.log('Incrementing USBnumber by 1');
-		USBnumber++;
-		var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
-			baudRate: 115200,
-		    // look for return and newline at the end of each data packet:
-		    parser: SerialPort.parsers.readline('\r\n')
-		});
+// function incrementUSB() {
+// 	if (USBnumber < 7){		
+// 		USBnumber++;
+// 		console.log('Now checking: /dev/ttyUSB' + USBnumber);
+// 		var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
+// 			baudRate: 115200,
+// 		    // look for return and newline at the end of each data packet:
+// 		    parser: SerialPort.parsers.readline('\r\n')
+// 		});
 
-		myPort.on('open', showPortOpen);
-		myPort.on('data', sendSerialData);
-		myPort.on('close', showPortClose);
-		myPort.on('error', showError);
-	}
-}
+// 		myPort.on('open', showPortOpen);
+// 		myPort.on('data', sendSerialData);
+// 		myPort.on('close', showPortClose);
+// 		myPort.on('error', showError);
+// 	}
+// }
 
 

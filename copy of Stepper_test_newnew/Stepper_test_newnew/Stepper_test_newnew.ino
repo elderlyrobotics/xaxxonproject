@@ -1,6 +1,9 @@
 #define gainLimit 20
 
 /*
+In the setup there is the Limit Switch while loop will run before the <reset>
+If you don't have the limit switches plugged in, uncomment the while loop in the setup.
+
 ASCII Serial Commands
   'A' and then 0-360 no space
   'B' and then 0-360 no space
@@ -18,7 +21,8 @@ const int in4 = 8;
 // Switch
 const int switchA = A2;
 const int switchB = A3;
-int resetCheck = 0;
+int resetCheckA = 0;
+int resetCheckB = 0;
 
 // Encoder
 const int encA = A0;
@@ -55,6 +59,12 @@ double sumBerror = 0;
 double pTermB = 0, iTermB = 0, dTermB = 0;
 double driveB = 0;
 
+/*
+SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
+SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
+SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
+*/
+
 void setup() {
   pinMode(pwmA, OUTPUT);
   pinMode(pwmB, OUTPUT);
@@ -79,8 +89,8 @@ void setup() {
   sei(); // switch back on
 
    // Initial motor setup
-  analogWrite(pwmA, 0); //(25% = 64; 50% = 127; 75% = 191; 100% = 255)
-  analogWrite(pwmB, 0);
+  analogWrite(pwmA, 45); //(25% = 64; 50% = 127; 75% = 191; 100% = 255)
+  analogWrite(pwmB, 45);
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   digitalWrite(in3, LOW);
@@ -89,19 +99,27 @@ void setup() {
   
 
   //N.O = GND, I.O = A2 and A3
-  while(resetCheck != 2) {
+  /*Limit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loop
+    Limit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loop
+ 
+  Limit switch while loop
+  Comment out this while loop if limit switches are not plugged in or else you can't test the servo motors.
+  The switches are using normally open (NO) and are plugged into A2 and A3 in the MALG board
+  */
+  /*
+  while(resetCheckA == 0 || resetCheckB == 0) {
     if(debounce(switchA)==LOW) {
       motorAstop();
-      resetCheck++;
+      resetCheckA = 1;
       encATicks = 0;
     }
-    else if(debounce(switchB)==LOW) {
+    if(debounce(switchB)==LOW) {
       motorBstop();
-      resetCheck++;
+      resetCheckB = 1;
       encBTicks = 0;
     }
   }
-  
+  */
   Serial.begin(115200);
   Serial.println("<reset>"); 
 }
@@ -196,6 +214,10 @@ void motorBstop() {
   lastBposition = encBTicks;
 }
 
+/*
+COMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDS
+COMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDSCOMMANDS
+*/
 int getCmd() {
   char cmd;
   int inputPosition;
@@ -211,7 +233,8 @@ int getCmd() {
   Serial.flush();
 
   switch (cmd) {
-    case 'A':
+ //   case 'A':
+    case 'a':
         if(inputPosition >= 0 && inputPosition <= 360) {
             runA = true;
             runB = false;
@@ -222,7 +245,8 @@ int getCmd() {
             Serial.println("Input out of range");
         }
         break;
-  case 'B':
+ //   case 'B':
+    case 'b':
         if(inputPosition >= 0 && inputPosition <= 360) {
             runB = true;
             runA = false;
@@ -232,7 +256,15 @@ int getCmd() {
         else {
             Serial.println("Input out of range");
         }
-        break;          
+        break;     
+//    case 'S':
+    case 's':
+        Serial.println("YOU WANT TO STOP");
+        break;  
+//    case 'X':
+    case 'x':
+        Serial.println("THIS SHOULD BE MALG ID");
+        break; 
   default:
         Serial.println("???");
   }

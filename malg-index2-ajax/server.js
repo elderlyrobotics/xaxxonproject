@@ -35,9 +35,14 @@ app.get('/commandX', function(req, res) {
 	res.send('Successfully sent command x!');
 });
 
-app.get('/commandB', function(req, res) {
-	commandB();
-	res.send('Successfully sent command b!');
+app.get('/commanda90', function(req, res) {
+	commanda90();
+	res.send('Successfully sent command a90!');
+});
+
+app.get('/commandb90', function(req, res) {
+	commandb90();
+	res.send('Successfully sent command b90!');
 });
 
 app.get('/commandSTOP', function(req, res) {
@@ -120,8 +125,12 @@ function commandX(){
 	myPort.write("x \r");
 }
 
-function commandB(){
-	myPort.write("b 100 \r");
+function commanda90(){
+	myPort.write("a90 \r");
+}
+
+function commandb90(){
+	myPort.write("b90 \r");
 }
 
 function commandY(){

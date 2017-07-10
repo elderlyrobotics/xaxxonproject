@@ -35,14 +35,14 @@ app.get('/commandX', function(req, res) {
 	res.send('Successfully sent command x!');
 });
 
-app.get('/commanda90', function(req, res) {
-	commanda90();
-	res.send('Successfully sent command a90!');
+app.get('/commanda20', function(req, res) {
+	commanda20();
+	res.send('Successfully sent command a20!');
 });
 
-app.get('/commandb90', function(req, res) {
-	commandb90();
-	res.send('Successfully sent command b90!');
+app.get('/commandb20', function(req, res) {
+	commandb20();
+	res.send('Successfully sent command b20!');
 });
 
 app.get('/commandSTOP', function(req, res) {
@@ -125,12 +125,12 @@ function commandX(){
 	myPort.write("x \r");
 }
 
-function commanda90(){
-	myPort.write("a90 \r");
+function commanda20(){
+	myPort.write("a20 \r");
 }
 
-function commandb90(){
-	myPort.write("b90 \r");
+function commandb20(){
+	myPort.write("b20 \r");
 }
 
 function commandY(){

@@ -54,9 +54,9 @@ $(function() {
 		});
 	});
 			//GET/READ
-	$('#get-commanda90').on('click', function() {
+	$('#get-commanda20').on('click', function() {
 		$.ajax({
-			url: '/commanda90',
+			url: '/commanda20',
 			contentType: 'application/json',
 			success: function(response) {
 				var tbodyEL = $('tbody');
@@ -75,9 +75,9 @@ $(function() {
 	});
 
 		//GET/READ
-	$('#get-commandb90').on('click', function() {
+	$('#get-commandb20').on('click', function() {
 		$.ajax({
-			url: '/commandb90',
+			url: '/commandb20',
 			contentType: 'application/json',
 			success: function(response) {
 				var tbodyEL = $('tbody');

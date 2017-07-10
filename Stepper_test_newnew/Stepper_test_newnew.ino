@@ -89,8 +89,8 @@ void setup() {
   sei(); // switch back on
 
    // Initial motor setup
-  analogWrite(pwmA, 45); //(25% = 64; 50% = 127; 75% = 191; 100% = 255)
-  analogWrite(pwmB, 45);
+  analogWrite(pwmA, 0); //(25% = 64; 50% = 127; 75% = 191; 100% = 255)
+  analogWrite(pwmB, 0);
   digitalWrite(in1, LOW);
   digitalWrite(in2, HIGH);
   digitalWrite(in3, LOW);
@@ -259,6 +259,8 @@ int getCmd() {
         break;     
     case 'S':
     case 's':
+        motorAstop();
+        motorBstop();
         Serial.println("YOU WANT TO STOP");
         break;  
     case 'X':

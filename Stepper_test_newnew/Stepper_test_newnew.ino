@@ -260,6 +260,8 @@ int getCmd() {
     case 'S':
     case 's':
         motorAstop();
+        motorAstop();
+        motorBstop();
         motorBstop();
         Serial.println("YOU WANT TO STOP");
         break;  

@@ -50,6 +50,11 @@ app.get('/commandSTOP', function(req, res) {
 	res.send('Successfully sent command STOP!');
 });
 
+app.get('/commandv100', function(req, res) {
+	commandv100();
+	res.send('Successfully sent command commandv100!');
+});
+
 
 
 app.post('/commands', function(req, res) {
@@ -135,6 +140,10 @@ function commandb20(){
 
 function commandY(){
 	myPort.write("y \r");
+}
+
+function commandv100(){
+	myPort.write("v 100 \r");
 }
 
 function sendSerialData(data) {

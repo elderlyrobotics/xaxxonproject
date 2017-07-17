@@ -94,6 +94,27 @@ $(function() {
 			}
 		});
 	});
+		//GET/READ
+	$('#get-commandv100').on('click', function() {
+		$.ajax({
+			url: '/commandv100',
+			contentType: 'application/json',
+			success: function(response) {
+				var tbodyEL = $('tbody');
+
+				tbodyEL.html('');
+
+				response.commands.forEach(function(command) {
+					tbodyEL.append('\
+						<tr>\
+							<td><input type="text" class="name" value="' + command.direction + '"></td>\
+						<tr>\
+					');
+				});
+			}
+		});
+	});
+
 
 
 	

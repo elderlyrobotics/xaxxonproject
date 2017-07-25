@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var joinPath = require('path.join');
 
 // var products = [
 var commands = [
@@ -19,9 +20,12 @@ var commands = [
 	direction: 'right'
 }
 ];
+var path = "/home/oculus/push_to_git/xaxxonproject/"
 
 var PORT = process.env.PORT || 5000;
 
+// Bower static path for jQuery and Bootstrap
+app.use(express.static(joinPath(__dirname, 'bower_components')));
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 

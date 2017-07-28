@@ -5,47 +5,49 @@
 	<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css' /> 
 </head>
 <body>
-<div class="container">
-	<div class="jumbotron">
-		<h1>Platform Controls</h1>
-		<p1>The buttons here will control the up, down, left or right motion of the platform.</p1>
+	<div class="container">
+		<div class="jumbotron">
+			<h1 class='text-center'>Platform Controls</h1>
+			<p1></p1>
+		</div>
+		<div class='panel panel-default'>
+			<div class='panel-heading text-center'>The buttons here will control the up, down, left or right motion of the platform.</div>
+			<div class='row panel-body'>
+				<div class='col-md-4 col-md-offset-4'>
+					<button id="get-up" class="btn btn-primary btn-lg btn-block">UP</button>
+				</div>
+			</div> <!-- end div for UP row -->
+			<div class='row panel-body'>
+				<div class='col-md-4 col-md-offset-1'>
+					<button id="get-left" class="btn btn-primary btn-lg btn-block">LEFT</button>
+				</div>
+				<div class='col-md-4 col-md-offset-2'>
+					<button id="get-right" class="btn btn-primary btn-lg btn-block">RIGHT</button>
+				</div>
+			</div> <!-- end div for LEFT and RIGHT row -->
+			<div class='row panel-body'>
+				<div class='col-md-4 col-md-offset-4'>
+					<button id="get-down" class="btn btn-primary btn-lg btn-block">DOWN</button>
+				</div>
+			</div> <!-- end div for DOWN row -->
+		</div>
+		<button id="get-commandSTOP" class="btn btn-danger btn-lg">commandSTOP</button>
+		<br>
+		<br>
+		<button id="get-commandX" class="btn btn-info">commandX</button>
+		<br>
+		<br>
+		<button id="get-commanda20" class="btn btn-primary">commanda20</button>
+		<br>
+		<br>
+		<button id="get-commandb20" class="btn btn-primary">commandb20</button>
+		<br>
+		<br>
+		<button id="get-commandv100" class="btn btn-primary">commandv100</button>
+		<br>
+		<br>
+
 	</div>
-	<button id="get-commandSTOP" class="btn btn-danger btn-lg">commandSTOP</button>
-	<br>
-	<br>
-	<button id="get-commandX" class="btn btn-info">commandX</button>
-	<br>
-	<br>
-	<button id="get-commanda20" class="btn btn-primary">commanda20</button>
-	<br>
-	<br>
-	<button id="get-commandb20" class="btn btn-primary">commandb20</button>
-	<br>
-	<br>
-	<button id="get-commandv100" class="btn btn-primary">commandv100</button>
-	<br>
-	<br>
-	<div class='panel panel-default'>
-		<div class='row panel-body'>
-			<div class='col-md-4 col-md-offset-4'>
-				<button id="get-up" class="btn btn-primary btn-lg">UP</button>
-			</div>
-		</div>
-		<div class='row'>
-			<div class='col-md-4'>
-				<button id="get-left" class="btn btn-primary btn-lg">LEFT</button>
-			</div>
-			<div class='col-md-8'>
-				<button id="get-right" class="btn btn-primary btn-lg">RIGHT</button>
-			</div>
-		</div>
-		<div class='row'>
-			<div class='col-md-4 col-md-offset-4'>
-				<button id="get-down" class="btn btn-primary btn-lg">DOWN</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 <!-- 	<script src="jquery.js"></script> -->
 	

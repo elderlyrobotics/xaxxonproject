@@ -116,7 +116,7 @@ myPort.on('error', showError);
 
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
-	setTimeout(commandReady, 2000);
+	setTimeout(commandReady, 4000);
 
 }
 

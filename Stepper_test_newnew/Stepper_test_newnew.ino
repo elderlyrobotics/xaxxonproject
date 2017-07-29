@@ -45,9 +45,9 @@ volatile boolean runCCW = false;
 
 
 //PID
-double Kp = 0.6; //0.6
+double Kp = 0.6; 
 double Ki = 0;
-double Kd = 0.3; //0.3;
+double Kd = 0.3;
 double errorA = 0;
 double lastAerror = 0;
 double sumAerror = 0;
@@ -89,24 +89,30 @@ void setup() {
   sei(); // switch back on
 
    // Initial motor setup
-  analogWrite(pwmA, 0); //(25% = 64; 50% = 127; 75% = 191; 100% = 255)
-  analogWrite(pwmB, 0);
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
+  analogWrite(pwmA, 230); // (25% = 64; 50% = 127; 75% = 191; 100% = 255)
+  analogWrite(pwmB, 150); // these are set to 0, if the limit switches aren't used
+//  digitalWrite(in1, LOW);
+//  digitalWrite(in2, HIGH);
+//  digitalWrite(in3, LOW);
+//  digitalWrite(in4, HIGH);
+
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  
   
   
 
   //N.O = GND, I.O = A2 and A3
-  /*Limit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loop
-    Limit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loopLimit switch while loop
- 
-  Limit switch while loop
+  /*
+    Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop
+    Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop Limit switch while loop 
+  
   Comment out this while loop if limit switches are not plugged in or else you can't test the servo motors.
   The switches are using normally open (NO) and are plugged into A2 and A3 in the MALG board
   */
-  /*
+  
   while(resetCheckA == 0 || resetCheckB == 0) {
     if(debounce(switchA)==LOW) {
       motorAstop();
@@ -118,8 +124,20 @@ void setup() {
       resetCheckB = 1;
       encBTicks = 0;
     }
+      // after 4 seconds 
+      // do same as above 
+    if (millis() >= 6000) {
+      motorAstop();
+      resetCheckA = 1;
+      encATicks = 0;
+     }
+     if (millis() >= 10000) {
+      motorBstop();
+      resetCheckB = 1;
+      encBTicks = 0;
+     }
   }
-  */
+  
   Serial.begin(115200);
   Serial.println("<reset>"); 
 }
@@ -150,7 +168,7 @@ int updateAPid(int targetposition, int currentposition) {
 
 void motorAmove(int PWM_val) {
   PWM_val = abs(PWM_val);
-  if (PWM_val < 35) PWM_val = 35;
+  if (PWM_val < 250) PWM_val = 250;
   if(goalAposition > lastAposition) {
        runCW = true;
        runCCW = false;
@@ -180,7 +198,7 @@ int updateBPid(int targetposition, int currentposition) {
 
 void motorBmove(int PWM_val) {
  PWM_val = abs(PWM_val);
- if (PWM_val < 35) PWM_val = 35;
+ if (PWM_val < 200) PWM_val = 200;
  if(goalBposition > lastBposition) {
      runCW = true;
      runCCW = false;
@@ -202,7 +220,7 @@ void motorAstop() {
   analogWrite(pwmA, 0);
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
-  delay(190);
+  delay(150); 
   lastAposition = encATicks;
 }
 
@@ -210,7 +228,7 @@ void motorBstop() {
   analogWrite(pwmB, 0);
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
-  delay(100);
+  delay(150);
   lastBposition = encBTicks;
 }
 
@@ -259,10 +277,6 @@ int getCmd() {
         break;     
     case 'S':
     case 's':
-        motorAstop();
-        motorAstop();
-        motorBstop();
-        motorBstop();
         Serial.println("YOU WANT TO STOP");
         break;  
     case 'X':
@@ -312,12 +326,14 @@ void loop() {
       driveA = updateAPid(goalAposition, lastAposition); 
       motorAmove(driveA);
       if(goalAposition == encATicks) motorAstop();
+      else if (abs(goalAposition - encATicks) <= 4) motorAstop();
 
     }
     if(runB) {
       driveB = updateBPid(goalBposition, lastBposition);
       motorBmove(driveB);
       if(goalBposition == encBTicks) motorBstop();
+      else if (abs(goalBposition - encBTicks) <= 4) motorBstop();
     }
   }
 }

@@ -20,7 +20,6 @@ var commands = [
 	direction: 'right'
 }
 ];
-var path = "/home/oculus/push_to_git/xaxxonproject/"
 
 var PORT = process.env.PORT || 5000;
 
@@ -52,11 +51,6 @@ app.get('/commandb20', function(req, res) {
 app.get('/commandSTOP', function(req, res) {
 	commandSTOP();
 	res.send('Successfully sent command STOP!');
-});
-
-app.get('/commandv100', function(req, res) {
-	commandv100();
-	res.send('Successfully sent command commandv100!');
 });
 
 
@@ -110,13 +104,12 @@ var myPort = new SerialPort('/dev/arduino', {
 myPort.on('open', showPortOpen);
 myPort.on('data', sendSerialData);
 myPort.on('close', showPortClose);
-// myPort.on('error', showError);
 myPort.on('error', showError);
 
 
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
-	setTimeout(commandReady, 4000);
+	setTimeout(commandReady, 10000);
 
 }
 
@@ -144,10 +137,6 @@ function commandb20(){
 
 function commandY(){
 	myPort.write("y \r");
-}
-
-function commandv100(){
-	myPort.write("v 100 \r");
 }
 
 function sendSerialData(data) {

@@ -45,9 +45,12 @@ volatile boolean runCCW = false;
 
 
 //PID
-double Kp = 0.6; 
-double Ki = 0;
-double Kd = 0.3;
+//double Kp = 0.6;
+double Kp = 1.9;
+//double Ki = 0;
+double Ki = 1.5;
+//double Kd = 0.3;
+double Kd = 1.6;
 double errorA = 0;
 double lastAerror = 0;
 double sumAerror = 0;
@@ -89,8 +92,8 @@ void setup() {
   sei(); // switch back on
 
    // Initial motor setup
-  analogWrite(pwmA, 230); // (25% = 64; 50% = 127; 75% = 191; 100% = 255)
-  analogWrite(pwmB, 150); // these are set to 0, if the limit switches aren't used
+  analogWrite(pwmA, 250); // (25% = 64; 50% = 127; 75% = 191; 100% = 255)
+  analogWrite(pwmB, 180); // these are set to 0, if the limit switches aren't used
 //  digitalWrite(in1, LOW);
 //  digitalWrite(in2, HIGH);
 //  digitalWrite(in3, LOW);
@@ -126,7 +129,7 @@ void setup() {
     }
       // after 4 seconds 
       // do same as above 
-    if (millis() >= 6000) {
+    if (millis() >= 10000) {
       motorAstop();
       resetCheckA = 1;
       encATicks = 0;

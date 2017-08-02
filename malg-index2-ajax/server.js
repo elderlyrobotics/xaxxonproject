@@ -3,23 +3,6 @@ var app = express();
 var bodyParser = require('body-parser');
 var joinPath = require('path.join');
 
-// var products = [
-var commands = [
-{
-	// id: 1,
-	// name: 'laptop'	
-	direction: 'up'	
-},
-{
-	direction: 'down'
-},
-{
-	direction: 'left'
-},
-{
-	direction: 'right'
-}
-];
 
 var PORT = process.env.PORT || 5000;
 
@@ -70,31 +53,18 @@ app.listen(PORT, function() {
 	console.log('Server listening on ' + PORT);
 });
 
-
-
-
-
-
 // **********************************************************************************
 // **********************************************************************************
-//  Communicate with the MALG board
+//  Communication with the MALG board
 
 // include the library SerialPort
 var SerialPort = require('serialport'); 
 
-//// shows list of ports
-// SerialPort.list(function (err, ports) {
-// 	ports.forEach(function(port) {
-// 		console.log(port.comName);
-// 		console.log(port.productId);
-// 	});
-// });
-
-// sometimes the port number changes when unplugged, 
-// e.g. today its at /dev/ttyUSB0 but tomorrow it can be /dev/ttyUSB3
-// so if there is an error the incrementUSB() function is called
-var USBnumber = 0
-// var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
+/*
+	sometimes the port number changes when unplugged, 
+	e.g. today its at /dev/ttyUSB0 but tomorrow it can be /dev/ttyUSB3
+	so if there is an error the incrementUSB() function is called
+*/
 var myPort = new SerialPort('/dev/arduino', {
 	baudRate: 115200,
     // look for return and newline at the end of each data packet:
@@ -152,22 +122,3 @@ function showError(error) {
 	console.log('Serial ' + error);
 	// incrementUSB();
 }
-
-// function incrementUSB() {
-// 	if (USBnumber < 7){		
-// 		USBnumber++;
-// 		console.log('Now checking: /dev/ttyUSB' + USBnumber);
-// 		var myPort = new SerialPort('/dev/ttyUSB' + USBnumber, {
-// 			baudRate: 115200,
-// 		    // look for return and newline at the end of each data packet:
-// 		    parser: SerialPort.parsers.readline('\r\n')
-// 		});
-
-// 		myPort.on('open', showPortOpen);
-// 		myPort.on('data', sendSerialData);
-// 		myPort.on('close', showPortClose);
-// 		myPort.on('error', showError);
-// 	}
-// }
-
-

@@ -29,7 +29,7 @@ app.listen(PORT, function() {
 
 /* 
 **********************************************************************************
-	GET requests
+	Routes - for GET requests
 **********************************************************************************
 */
 // sending 'x' is set to show MALG ID
@@ -65,7 +65,7 @@ app.get('/commandRight', function(req, res) {
 
 /* 
 **********************************************************************************
-	Communication with the MALG board
+	Communication with the MALG board - setting up SerialPort
 **********************************************************************************
 */
 // include the library SerialPort
@@ -87,29 +87,6 @@ myPort.on('data', sendSerialData);
 myPort.on('close', showPortClose);
 myPort.on('error', showError);
 
-
-function showPortOpen() {
-	console.log('port open. Data rate: ' + myPort.options.baudRate);
-	setTimeout(commandReady, 10000);
-}
-
-function commandReady(){
-	console.log('Ready to receive camera commands: up, down, left, or right.');
-}
-
-// Commands  
-function commandStop(){
-	myPort.write("s \r");
-}
-
-function commandX(){
-	myPort.write("x \r");
-}
-
-function commandUp(){
-	myPort.write("a20 \r");
-}
-
 // serial events default functions
 function sendSerialData(data) {
 	console.log(data);
@@ -122,3 +99,67 @@ function showPortClose() {
 function showError(error) {
 	console.log('Serial ' + error);
 }
+
+/* 
+**********************************************************************************
+	Communication with the MALG board - commands
+**********************************************************************************
+*/
+
+function showPortOpen() {
+	console.log('port open. Data rate: ' + myPort.options.baudRate);
+	setTimeout(commandReady, 10000);
+}
+
+
+var tilt = 0;
+var pan = 0;
+function commandReady(){
+	console.log('Ready to receive camera commands: up, down, left, or right.');
+	tilt = tilt + 65;
+	myPort.write("A" + tilt + " \r");
+	pan = pan + 150;
+	myPort.write("B" + pan + " \r");
+}
+
+function commandStop(){
+	myPort.write("s \r");
+	myPort.write("S \r");
+}
+
+function commandX(){
+	myPort.write("x \r");
+}
+
+function commandUp(){
+	tilt = tilt + 5;
+	console.log('tilt value: ' + tilt);
+	myPort.write("A" + tilt + " \r");
+}
+
+function commandDown(){
+	tilt = tilt - 5;
+	console.log('tilt value: ' + tilt);
+	myPort.write("A" + tilt + " \r");
+}
+
+function commandLeft(){
+	if (tilt >= 50) {
+		pan = pan;
+	}else{
+		pan = pan + 50
+	}
+	console.log('pan value: ' + pan);
+	myPort.write("B" + pan + " \r");
+}
+
+function commandRight(){
+	if (tilt >= 50) {
+		pan = pan;
+	}else{
+		pan = pan - 50
+	}
+	console.log('pan value: ' + pan);
+	myPort.write("B" + pan + " \r");
+}
+

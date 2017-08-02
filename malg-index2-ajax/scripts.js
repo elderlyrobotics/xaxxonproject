@@ -2,53 +2,43 @@ $(function() {
 	//GET/READ
 	$('#get-commandX').on('click', function() {
 		$.ajax({
-			url: '/commandX',
-			}		
+			url: '/commandX'	
 		});
 	});
 
 	//GET/READ
-	$('#get-commandStop').on('click', function() {
+	$('#get-stop').on('click', function() {
 		$.ajax({
-			url: '/commandStop',
-			}
+			url: '/commandStop'
 		});
 	});
 	
 	//GET/READ
 	$('#get-up').on('click', function() {
 		$.ajax({
-			url: '/commandUp',
-			}
+			url: '/commandUp'
 		});
 	});
 	
 	//GET/READ
 	$('#get-down').on('click', function() {
 		$.ajax({
-			url: '/commandDown',
-			}
+			url: '/commandDown'
 		});
 	});
 	
 	//GET/READ
 	$('#get-left').on('click', function() {
 		$.ajax({
-			url: '/commandLeft',
-			}
+			url: '/commandLeft'
 		});
 	});
 	
 	//GET/READ
 	$('#get-right').on('click', function() {
 		$.ajax({
-			url: '/commandRight',
-			}
+			url: '/commandRight'
 		});
 	});
 
-
-
-
-	
 });

@@ -45,12 +45,12 @@ volatile boolean runCCW = false;
 
 
 //PID
-//double Kp = 0.6;
-double Kp = 2.9;
-//double Ki = 0;
+double Kp = 0.6;
 double Ki = 0;
-//double Kd = 0.3;
-double Kd = 2.6;
+double Kd = 0.3;
+//double Kp = 2.9;
+//double Ki = 0;
+//double Kd = 2.6;
 double errorA = 0;
 double lastAerror = 0;
 double sumAerror = 0;
@@ -63,7 +63,6 @@ double pTermB = 0, iTermB = 0, dTermB = 0;
 double driveB = 0;
 
 /*
-SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
 SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
 SETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUPSETUP
 */
@@ -92,8 +91,8 @@ void setup() {
   sei(); // switch back on
 
    // Initial motor setup
-  analogWrite(pwmA, 200); // (25% = 64; 50% = 127; 75% = 191; 100% = 255)
-  analogWrite(pwmB, 140); // these are set to 0, if the limit switches aren't used
+  analogWrite(pwmA, 150); // (25% = 64; 50% = 127; 75% = 191; 100% = 255)
+  analogWrite(pwmB, 150); // these are set to 0, if the limit switches aren't used
 //  digitalWrite(in1, LOW);
 //  digitalWrite(in2, HIGH);
 //  digitalWrite(in3, LOW);
@@ -171,7 +170,7 @@ int updateAPid(int targetposition, int currentposition) {
 
 void motorAmove(int PWM_val) {
   PWM_val = abs(PWM_val);
-  if (PWM_val < 200) PWM_val = 200;
+  if (PWM_val < 130) PWM_val = 130;
   if(goalAposition > lastAposition) {
        runCW = true;
        runCCW = false;
@@ -201,7 +200,7 @@ int updateBPid(int targetposition, int currentposition) {
 
 void motorBmove(int PWM_val) {
  PWM_val = abs(PWM_val);
- if (PWM_val < 200) PWM_val = 200;
+ if (PWM_val < 200) PWM_val = 250;
  if(goalBposition > lastBposition) {
      runCW = true;
      runCCW = false;
@@ -221,16 +220,16 @@ void motorBmove(int PWM_val) {
 
 void motorAstop() {
   analogWrite(pwmA, 0);
-//  digitalWrite(in1, LOW);
-//  digitalWrite(in2, LOW);
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
   delay(150); 
   lastAposition = encATicks;
 }
 
 void motorBstop() {
   analogWrite(pwmB, 0);
-//  digitalWrite(in3, LOW);
-//  digitalWrite(in4, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
   delay(150);
   lastBposition = encBTicks;
 }
@@ -259,34 +258,44 @@ int getCmd() {
   switch (cmd) {
     case 'A':
     case 'a':
+        /*
+        // single channel, 1 count, 3 pulses
+        // therefore using 200k, => 200 * 3 = 600
+        // and 600/360 = 1.6666
+        // every count is 1.6666 per degrees
+        // number im inputting is a count not degree
         // A is using a 200K motor while B is using 60
-        //inputPosition = round(inputPosition * 3.3333);
-        if(inputPosition >= 0 && inputPosition <= 360) {
+        */
+//        if(inputPosition >= 0 && inputPosition <= 360) {
             runA = true;
             runB = false;
             //inputPosition = inputPosition/2;
             //goalAposition = inputPosition;
-            goalAposition = round(inputPosition * 3.3333);
-        }
-        else {
-            Serial.println("Input out of range");
-        }
+            goalAposition = round(inputPosition * 1.6666);
+            //goalAposition = round(inputPosition * 3.3333);
+            
+//        }
+//        else {
+//            Serial.println("Input out of range");
+//        }
         break;
     case 'B':
     case 'b':
-        if(inputPosition >= 0 && inputPosition <= 360) {
+       // if(inputPosition >= 0 && inputPosition <= 360) {
             runB = true;
             runA = false;
             inputPosition = inputPosition/2;
             goalBposition = inputPosition;
-        }
-        else {
-            Serial.println("Input out of range");
-        }
+//        }
+//        else {
+//            Serial.println("Input out of range");
+//        }
         break;     
     case 'S':
     case 's':
         Serial.println("YOU WANT TO STOP");
+        motorAstop();
+        motorBstop();
         break;  
     case 'X':
     case 'x':
@@ -335,13 +344,13 @@ void loop() {
       driveA = updateAPid(goalAposition, lastAposition); 
       motorAmove(driveA);
       if(goalAposition == encATicks) motorAstop();
-      else if ( (abs(goalAposition - encATicks) <= 10) ) motorAstop();
+      else if ( (abs(goalAposition - encATicks) <= 5) ) motorAstop();
     }
     if(runB) {
       driveB = updateBPid(goalBposition, lastBposition);
       motorBmove(driveB);
       if(goalBposition == encBTicks) motorBstop();
-      else if ( (abs(goalBposition - encBTicks) <= 4) ) motorBstop();
+      else if ( (abs(goalBposition - encBTicks) <= 5) ) motorBstop();
     }
   }
 }

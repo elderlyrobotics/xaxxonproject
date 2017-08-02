@@ -7,17 +7,42 @@ $(function() {
 		});
 	});
 
-		//GET/READ
-	$('#get-commandSTOP').on('click', function() {
+	//GET/READ
+	$('#get-commandStop').on('click', function() {
 		$.ajax({
-			url: '/commandSTOP',
+			url: '/commandStop',
 			}
 		});
 	});
-			//GET/READ
-	$('#get-commanda20').on('click', function() {
+	
+	//GET/READ
+	$('#get-up').on('click', function() {
 		$.ajax({
-			url: '/commanda20',
+			url: '/commandUp',
+			}
+		});
+	});
+	
+	//GET/READ
+	$('#get-down').on('click', function() {
+		$.ajax({
+			url: '/commandDown',
+			}
+		});
+	});
+	
+	//GET/READ
+	$('#get-left').on('click', function() {
+		$.ajax({
+			url: '/commandLeft',
+			}
+		});
+	});
+	
+	//GET/READ
+	$('#get-right').on('click', function() {
+		$.ajax({
+			url: '/commandRight',
 			}
 		});
 	});

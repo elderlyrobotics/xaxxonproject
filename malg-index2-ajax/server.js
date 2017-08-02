@@ -1,62 +1,73 @@
+/* 
+**********************************************************************************
+	Setting up the server
+**********************************************************************************
+*/
+
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var joinPath = require('path.join');
 
-
+/*
+	sets the port number of web app -> IPADDRESS:PORT
+	we are using 5000 -> localhost:5000
+*/
 var PORT = process.env.PORT || 5000;
 
-// Bower static path for jQuery and Bootstrap
+/*
+	Bower static path for jQuery and Bootstrap
+	bodyParser is an artefact from old tutorial this server was based on
+*/
 app.use(express.static(joinPath(__dirname, 'bower_components')));
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
-
-
-app.get('/commands', function(req, res) {
-	res.send({ commands: commands });
-});
-
-app.get('/commandX', function(req, res) {
-	commandX();
-	res.send('Successfully sent command x!');
-});
-
-app.get('/commanda20', function(req, res) {
-	commanda20();
-	res.send('Successfully sent command a20!');
-});
-
-app.get('/commandb20', function(req, res) {
-	commandb20();
-	res.send('Successfully sent command b20!');
-});
-
-app.get('/commandSTOP', function(req, res) {
-	commandSTOP();
-	res.send('Successfully sent command STOP!');
-});
-
-
-
-app.post('/commands', function(req, res) {
-    var commandDirection = req.body.name;
-
-    products.push({
-        name: commandDirection
-    });
-
-    res.send('Successfully created product!');
-});
-
 
 app.listen(PORT, function() {
 	console.log('Server listening on ' + PORT);
 });
 
-// **********************************************************************************
-// **********************************************************************************
-//  Communication with the MALG board
+/* 
+**********************************************************************************
+	GET requests
+**********************************************************************************
+*/
+// sending 'x' is set to show MALG ID
+app.get('/commandX', function(req, res) {
+	commandX();
+	res.send('Successfully sent command x!');
+});
 
+app.get('/commandStop', function(req, res) {
+	commandStop();
+	res.send('Successfully sent command STOP!');
+});
+
+app.get('/commandUp', function(req, res) {
+	commandUp();
+	res.send('Successfully sent command Up!');
+});
+
+app.get('/commandDown', function(req, res) {
+	commandDown();
+	res.send('Successfully sent command Down!');
+});
+
+app.get('/commandLeft', function(req, res) {
+	commandLeft();
+	res.send('Successfully sent command Left!');
+});
+
+app.get('/commandRight', function(req, res) {
+	commandRight();
+	res.send('Successfully sent command Right!');
+});
+
+/* 
+**********************************************************************************
+	Communication with the MALG board
+**********************************************************************************
+*/
 // include the library SerialPort
 var SerialPort = require('serialport'); 
 
@@ -80,16 +91,14 @@ myPort.on('error', showError);
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
 	setTimeout(commandReady, 10000);
-
 }
 
 function commandReady(){
 	console.log('Ready to receive camera commands: up, down, left, or right.');
 }
 
-// COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS 
-// COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS COMMANDS 
-function commandSTOP(){
+// Commands  
+function commandStop(){
 	myPort.write("s \r");
 }
 
@@ -97,28 +106,19 @@ function commandX(){
 	myPort.write("x \r");
 }
 
-function commanda20(){
+function commandUp(){
 	myPort.write("a20 \r");
 }
 
-function commandb20(){
-	myPort.write("b20 \r");
-}
-
-function commandY(){
-	myPort.write("y \r");
-}
-
+// serial events default functions
 function sendSerialData(data) {
 	console.log(data);
 }
 
-// default functions
 function showPortClose() {
 	console.log('port closed.');
 }
  
 function showError(error) {
 	console.log('Serial ' + error);
-	// incrementUSB();
 }

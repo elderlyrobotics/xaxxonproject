@@ -344,13 +344,13 @@ void loop() {
       driveA = updateAPid(goalAposition, lastAposition); 
       motorAmove(driveA);
       if(goalAposition == encATicks) motorAstop();
-      else if ( (abs(goalAposition - encATicks) <= 3) ) motorAstop();
+      else if ( (abs(goalAposition - encATicks) <= 10) ) motorAstop();
     }
     if(runB) {
       driveB = updateBPid(goalBposition, lastBposition);
       motorBmove(driveB);
       if(goalBposition == encBTicks) motorBstop();
-      else if ( (abs(goalBposition - encBTicks) <= 3) ) motorBstop();
+      else if ( (abs(goalBposition - encBTicks) <= 5) ) motorBstop();
     }
   }
 }

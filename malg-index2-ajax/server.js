@@ -117,7 +117,7 @@ function commandReady(){
 }
 
 function commandReadyTilt(){
-	tilt = tilt + 40;
+	tilt = tilt + 50;
 	test = "a" + tilt + "\r";
 	console.log("test value: " + test);
 	myPort.write(test);
@@ -142,21 +142,32 @@ function commandX(){
 }
 
 function commandUp(){
-	tilt = tilt + 10;
+	tilt = tilt - 10;
 	console.log('tilt value: ' + tilt);
 	myPort.write("a" + tilt + "\r");
+	// if too many clicks up we need the tilt value to be positive
+	if (tilt <= 0){
+		tilt = 10;
+	}
 }
 
 function commandDown(){
-	tilt = tilt - 10;	
+	if (tilt >= 100) {
+		tilt = tilt;
+		console.log('Tilting down too much.');
+	}
+	tilt = tilt + 10;	
 	console.log('tilt value: ' + tilt);
 	myPort.write("a" + tilt + "\r");
 }
 
 function commandLeft(){
-	if (tilt >= 80) {
+	if (tilt >= 100) {
 		pan = pan;
 		console.log('Tilt value too much to turn.');
+	}else if (pan >= 300){
+		pan = pan;
+		console.log('Panning to the left too much.');
 	}else{
 		pan = pan + 25;
 	}
@@ -165,7 +176,7 @@ function commandLeft(){
 }
 
 function commandRight(){
-	if (tilt >= 80) {
+	if (tilt >= 100) {
 		pan = pan;
 		console.log('Tilt value too much to turn.');
 	}else{
@@ -173,5 +184,9 @@ function commandRight(){
 	}
 	console.log('pan value: ' + pan);
 	myPort.write("b" + pan + "\r");
+	// if too many clicks to the right we need the pan value to be positive
+	if (pan <= 0){
+		pan = 25;
+	}
 }
 

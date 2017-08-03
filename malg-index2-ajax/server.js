@@ -6,9 +6,8 @@
 
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
 var joinPath = require('path.join');
-
+var bodyParser = require('body-parser');
 /*
 	sets the port number of web app -> IPADDRESS:PORT
 	we are using 5000 -> localhost:5000
@@ -68,18 +67,17 @@ app.get('/commandRight', function(req, res) {
 	Communication with the MALG board - setting up SerialPort
 **********************************************************************************
 */
-// include the library SerialPort
+// include the library SerialPort and bodyparser
 var SerialPort = require('serialport'); 
-
 /*
 	sometimes the port number changes when unplugged, 
 	e.g. today its at /dev/ttyUSB0 but tomorrow it can be /dev/ttyUSB3
 	so if there is an error the incrementUSB() function is called
 */
 var myPort = new SerialPort('/dev/arduino', {
-	baudRate: 115200,
+	baudRate: 115200//,
     // look for return and newline at the end of each data packet:
-    parser: SerialPort.parsers.readline('\r\n')
+    //parser: SerialPort.parsers.readline('\r\n')
 });	
 
 myPort.on('open', showPortOpen);
@@ -89,7 +87,7 @@ myPort.on('error', showError);
 
 // serial events default functions
 function sendSerialData(data) {
-	console.log(data);
+	console.log(data.toString());
 }
 
 function showPortClose() {
@@ -105,61 +103,75 @@ function showError(error) {
 	Communication with the MALG board - commands
 **********************************************************************************
 */
+var tilt = 0;
+var pan = 0;
 
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
-	setTimeout(commandReady, 10000);
+	setTimeout(commandReady, 5000);
 }
 
-
-var tilt = 0;
-var pan = 0;
 function commandReady(){
 	console.log('Ready to receive camera commands: up, down, left, or right.');
-	tilt = tilt + 65;
-	myPort.write("A" + tilt + " \r");
-	pan = pan + 150;
-	myPort.write("B" + pan + " \r");
+	setTimeout(commandReadyTilt, 1000);
 }
 
+function commandReadyTilt(){
+	tilt = tilt + 40;
+	test = "a" + tilt + "\r";
+	console.log("test value: " + test);
+	myPort.write(test);
+	setTimeout(commandReadyPan, 1000);
+}
+
+function commandReadyPan(){
+	pan = pan + 125;
+	test222 = "b" + pan + "\r";
+	console.log("test222 value: " + test222);
+	myPort.write(test222);
+}
+
+
 function commandStop(){
-	myPort.write("s \r");
-	myPort.write("S \r");
+	myPort.write("s\r");
+	myPort.write("S\r");
 }
 
 function commandX(){
-	myPort.write("x \r");
+	myPort.write("x");
 }
 
 function commandUp(){
-	tilt = tilt + 5;
+	tilt = tilt + 10;
 	console.log('tilt value: ' + tilt);
-	myPort.write("A" + tilt + " \r");
+	myPort.write("a" + tilt + "\r");
 }
 
 function commandDown(){
-	tilt = tilt - 5;
+	tilt = tilt - 10;	
 	console.log('tilt value: ' + tilt);
-	myPort.write("A" + tilt + " \r");
+	myPort.write("a" + tilt + "\r");
 }
 
 function commandLeft(){
-	if (tilt >= 50) {
+	if (tilt >= 80) {
 		pan = pan;
+		console.log('Tilt value too much to turn.');
 	}else{
-		pan = pan + 50
+		pan = pan + 25;
 	}
 	console.log('pan value: ' + pan);
-	myPort.write("B" + pan + " \r");
+	myPort.write("b" + pan + "\r");
 }
 
 function commandRight(){
-	if (tilt >= 50) {
+	if (tilt >= 80) {
 		pan = pan;
+		console.log('Tilt value too much to turn.');
 	}else{
-		pan = pan - 50
+		pan = pan - 25;
 	}
 	console.log('pan value: ' + pan);
-	myPort.write("B" + pan + " \r");
+	myPort.write("b" + pan + "\r");
 }
 

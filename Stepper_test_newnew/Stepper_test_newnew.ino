@@ -91,8 +91,8 @@ void setup() {
   sei(); // switch back on
 
    // Initial motor setup
-  analogWrite(pwmA, 150); // (25% = 64; 50% = 127; 75% = 191; 100% = 255)
-  analogWrite(pwmB, 150); // these are set to 0, if the limit switches aren't used
+  analogWrite(pwmA, 120); // (25% = 64; 50% = 127; 75% = 191; 100% = 255)
+  analogWrite(pwmB, 120); // these are set to 0, if the limit switches aren't used
 //  digitalWrite(in1, LOW);
 //  digitalWrite(in2, HIGH);
 //  digitalWrite(in3, LOW);
@@ -200,7 +200,7 @@ int updateBPid(int targetposition, int currentposition) {
 
 void motorBmove(int PWM_val) {
  PWM_val = abs(PWM_val);
- if (PWM_val < 200) PWM_val = 250;
+ if (PWM_val < 200) PWM_val = 222;
  if(goalBposition > lastBposition) {
      runCW = true;
      runCCW = false;
@@ -266,7 +266,7 @@ int getCmd() {
         // number im inputting is a count not degree
         // A is using a 200K motor while B is using 60
         */
-//        if(inputPosition >= 0 && inputPosition <= 360) {
+        if(inputPosition >= 0 && inputPosition <= 360) {
             runA = true;
             runB = false;
             //inputPosition = inputPosition/2;
@@ -274,22 +274,22 @@ int getCmd() {
             goalAposition = round(inputPosition * 1.6666);
             //goalAposition = round(inputPosition * 3.3333);
             
-//        }
-//        else {
-//            Serial.println("Input out of range");
-//        }
+        }
+        else {
+            Serial.println("Input out of range");
+        }
         break;
     case 'B':
     case 'b':
-       // if(inputPosition >= 0 && inputPosition <= 360) {
+        if(inputPosition >= 0 && inputPosition <= 360) {
             runB = true;
             runA = false;
             inputPosition = inputPosition/2;
             goalBposition = inputPosition;
-//        }
-//        else {
-//            Serial.println("Input out of range");
-//        }
+        }
+        else {
+            Serial.println("Input out of range");
+        }
         break;     
     case 'S':
     case 's':
@@ -344,13 +344,13 @@ void loop() {
       driveA = updateAPid(goalAposition, lastAposition); 
       motorAmove(driveA);
       if(goalAposition == encATicks) motorAstop();
-      else if ( (abs(goalAposition - encATicks) <= 5) ) motorAstop();
+      else if ( (abs(goalAposition - encATicks) <= 3) ) motorAstop();
     }
     if(runB) {
       driveB = updateBPid(goalBposition, lastBposition);
       motorBmove(driveB);
       if(goalBposition == encBTicks) motorBstop();
-      else if ( (abs(goalBposition - encBTicks) <= 5) ) motorBstop();
+      else if ( (abs(goalBposition - encBTicks) <= 3) ) motorBstop();
     }
   }
 }

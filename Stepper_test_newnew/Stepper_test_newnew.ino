@@ -350,7 +350,7 @@ void loop() {
       driveB = updateBPid(goalBposition, lastBposition);
       motorBmove(driveB);
       if(goalBposition == encBTicks) motorBstop();
-      else if ( (abs(goalBposition - encBTicks) <= 5) ) motorBstop();
+      else if ( (abs(goalBposition - encBTicks) <= 3) ) motorBstop();
     }
   }
 }

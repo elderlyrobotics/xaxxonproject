@@ -108,7 +108,7 @@ var pan = 0;
 
 function showPortOpen() {
 	console.log('port open. Data rate: ' + myPort.options.baudRate);
-	setTimeout(commandReady, 5000);
+	setTimeout(commandReady, 7000);
 }
 
 function commandReady(){
